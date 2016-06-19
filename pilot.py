@@ -1,19 +1,73 @@
 from ardrone import libardrone
-import time
+from global_vars import *
+from power_to_distance import *
+
+from time import sleep
+import os
+
+
+#get RSSI (received signal strength indication) for one network
+def _get_sig_pwr(essid):
+	global secondary_net_interface
+	x=os.popen('iwlist '+secondary_net_interface+' scan | grep -B3 "ESSID:\\"'+essid+'"').read()
+	y=x.index('Signal level=')
+	y+=len('Signal level=')
+	z=x[y:].index(' ')
+	return int(x[y:y+z])
+
+def next_to(x,y):
+	if x==y+1 or x==y-1 or x==y:
+		return True
+	else:
+		return False
+
+def get_sig_pwr(essid):
+	prec_val=0xdeadbeef
+	val=0xdeadbeef+2
+	while not next_to(val,prec_val):
+		prec_val=val
+		val=_get_sig_pwr(essid)
+		sleep(.2)
+	
+	if val>prec_val:
+		return val
+	else:
+		return prec_val
+
+def get_move_timelapse(pwr):
+	if pwr>=-65:
+		return 1
+	elif pwr>=70:
+		return 2
+	else:
+		return 3
+
 
 #Whenever the program takeover a parrot drone, it launches *pilot_routine* to fly it away.
-def pilot_routine():
+def pilot_routine(essid):
+	global fly_away_threshold
+	
 	print 'Pilot routine started	!!!	'
 	drone = libardrone.ARDrone()
-	#drone.reset()
-	drone.takeoff()
-	time.sleep(2)
-	drone.land()
-	time.sleep(3)
+	drone.set_speed(0.5)
+	
+	
+	current=get_sig_pwr(essid)
+	print current
+
+	
+	while current>=fly_away_threshold:
+		drone.move_forward()
+		sleep(get_move_timelapse(current))
+		drone.hover()
+		sleep(.2)
+		new=get_sig_pwr(essid)
+		print new
+
+		if new>current:
+			drone.turn_left()
+			sleep(2.6666)
+			drone.hover()
+		current=new
+	drone.hover()
 	drone.halt()
-
-def main():
-	pilot_routine()
-
-if __name__ == "__main__":
-    main()

