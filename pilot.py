@@ -46,7 +46,7 @@ def get_move_timelapse(pwr):
 #Whenever the program takeover a parrot drone, it launches *pilot_routine* to fly it away.
 def pilot_routine(essid):
 	global fly_away_threshold
-	
+	sleep(4)	#wait for the drone to forget his old controller - 4 sec is tested 100% working
 	print 'Pilot routine started	!!!	'
 	drone = libardrone.ARDrone()
 	drone.set_speed(0.5)
