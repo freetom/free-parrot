@@ -1,7 +1,11 @@
---- pilot.py	2016-06-20 15:58:14.081925170 +0200
-+++ new_pilot.py	2016-06-20 16:03:37.653908807 +0200
-@@ -12,8 +12,8 @@
- 	x=os.popen('iwlist '+secondary_net_interface+' scan | grep -B3 "ESSID:\\"'+essid+'"').read()
+--- old_pilot	2016-06-20 17:16:22.041688107 +0200
++++ pilot.py	2016-06-20 17:32:28.757639221 +0200
+@@ -9,11 +9,11 @@
+ #get RSSI (received signal strength indication) for one network
+ def _get_sig_pwr(essid):
+ 	global secondary_net_interface
+-	x=os.popen('iwlist '+secondary_net_interface+' scan | grep -B3 "ESSID:\\"'+essid+'"').read()
++	x=os.popen('iwlist '+secondary_net_interface+' scan | grep -A3 "ESSID:\\"'+essid+'"').read()
  	y=x.index('Signal level=')
  	y+=len('Signal level=')
 -	z=x[y:].index(' ')
