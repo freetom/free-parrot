@@ -26,6 +26,8 @@ nets=[]
 def disconnect():
 	global shell_disconnect
 	os.popen(shell_disconnect)
+	os.popen('ifconfig '+net_interface+' down')
+	os.popen('ifconfig '+net_interface+' up')
 	print 'disconnected'
 
 def connect(essid):

@@ -1,0 +1,13 @@
+--- net.py	2016-06-20 15:58:14.081925170 +0200
++++ new_net.py	2016-06-20 16:00:18.833918861 +0200
+@@ -15,8 +15,8 @@
+ 		self.essid=descriptor_str[i:i+j]
+ 
+ 		i=descriptor_str.index('Signal level=')+len('Signal level=')
+-		j=descriptor_str[i:].index(' ')
++		j=descriptor_str[i:].index('/')
+ 		self.rx_power=descriptor_str[i:i+j]
+-
++		self.rx_power=str((int(self.rx_power)/2)-100)
+ 		#if 'ardrone' in self.essid:
+ 		#	print 'Net -> '+self.ap_mac+' '+self.rx_power+'dBm '+self.essid+' '+str(self.frequency)+'Mhz'

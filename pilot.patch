@@ -1,0 +1,13 @@
+--- pilot.py	2016-06-20 15:58:14.081925170 +0200
++++ new_pilot.py	2016-06-20 16:03:37.653908807 +0200
+@@ -12,8 +12,8 @@
+ 	x=os.popen('iwlist '+secondary_net_interface+' scan | grep -B3 "ESSID:\\"'+essid+'"').read()
+ 	y=x.index('Signal level=')
+ 	y+=len('Signal level=')
+-	z=x[y:].index(' ')
+-	return int(x[y:y+z])
++	z=x[y:].index('/')
++	return (int(x[y:y+z])/2)-100	#	Quality to RSSI conversion
+ 
+ def next_to(x,y):
+ 	if x==y+1 or x==y-1 or x==y:

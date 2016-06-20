@@ -58,15 +58,15 @@ def pilot_routine(essid):
 	
 	while current>=fly_away_threshold:
 		drone.move_forward()
-		sleep(get_move_timelapse(current))
+		sleep(get_move_timelapse(current))	#move forward more if is more far, less if is next to
 		drone.hover()
 		sleep(.2)
-		new=get_sig_pwr(essid)
+		new=get_sig_pwr(essid)	#update new drone distance through signal power
 		print new
 
 		if new>current:
 			drone.turn_left()
-			sleep(2.6666)
+			sleep(2.6666)	#turn 120 grades
 			drone.hover()
 		current=new
 	drone.hover()
