@@ -1,3 +1,5 @@
+import re
+
 class net:
 	def __init__(self, descriptor_str):
 		#print descriptor_str
@@ -13,6 +15,10 @@ class net:
 		i=descriptor_str.index('ESSID')+len('ESSID')+2
 		j=descriptor_str[i:].index("\"")
 		self.essid=descriptor_str[i:i+j]
+		# avoid command injection
+		if not re.match("^[a-zA-Z0-9\ _\-]+$", self.essid):
+			print "[FATAL] invalid ESSID detected"
+			exit(1)
 
 		i=descriptor_str.index('Signal level=')+len('Signal level=')
 		j=descriptor_str[i:].index(' ')
